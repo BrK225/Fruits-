@@ -3,248 +3,357 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FreshFruits — Online Fruit Store</title>
+  <title>Save Editor Online — Fast, Browser-Based Save Editing</title>
+  <meta name="description" content="A replica-inspired landing page for Save Editor Online." />
   <style>
-    :root{
-      --bg:#f7f9fb; --card:#ffffff; --accent:#159957; --muted:#6b7280; --glass: rgba(255,255,255,0.6);
-      --shadow: 0 6px 18px rgba(22, 28, 37, 0.08);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    :root {
+      --bg: #090c18;
+      --panel: #11172a;
+      --panel-2: #0d1323;
+      --text: #ecf2ff;
+      --muted: #9db0d4;
+      --accent: #7d5fff;
+      --accent-2: #17d4ff;
+      --ring: rgba(125, 95, 255, 0.35);
+      --success: #4ade80;
+      --danger: #fb7185;
+      --border: rgba(160, 180, 220, 0.2);
+      --shadow: 0 20px 60px rgba(4, 8, 20, 0.6);
     }
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#f0f8f2 0%,var(--bg) 100%);color:#0f172a}
-    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#2ecc71);display:grid;place-items:center;color:#fff;font-weight:700;box-shadow:var(--shadow)}
-    .brand h1{margin:0;font-size:18px}
-    nav{display:flex;gap:12px;align-items:center}
-    .btn{background:var(--card);padding:10px 14px;border-radius:10px;box-shadow:var(--shadow);border:none;cursor:pointer}
-    .search{display:flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:var(--card);box-shadow:var(--shadow)}
-    .search input{border:0;outline:none;background:transparent;font-size:14px}
 
-    .hero{display:flex;gap:28px;align-items:center;padding:26px 28px}
-    .hero-left{max-width:620px}
-    .hero h2{margin:0;font-size:34px;line-height:1.02}
-    .hero p{color:var(--muted);margin-top:10px}
-    .cta{margin-top:18px}
-    .cta .primary{background:linear-gradient(90deg,var(--accent),#2ecc71);color:#fff;padding:12px 18px;border-radius:12px;border:none;cursor:pointer}
+    * { box-sizing: border-box; }
 
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:24px;padding:20px 28px}
-    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
-    .card{background:var(--card);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
-    .imgwrap{height:140px;border-radius:10px;overflow:hidden;display:grid;place-items:center}
-    .imgwrap img{width:100%;height:100%;object-fit:cover}
-    .price-row{display:flex;justify-content:space-between;align-items:center}
-    .price{font-weight:700}
-    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:#eef7ee;color:#166534}
-    .add{background:linear-gradient(90deg,#ffb703,#ff7a18);border:0;padding:8px 12px;border-radius:10px;color:#fff;cursor:pointer}
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(23, 212, 255, 0.16), transparent 40%),
+        radial-gradient(circle at 85% 5%, rgba(125, 95, 255, 0.28), transparent 35%),
+        var(--bg);
+      min-height: 100vh;
+    }
 
-    aside{position:sticky;top:20px;height:max-content}
-    .cart{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
-    .cart h3{margin:0}
-    .cart-items{display:flex;flex-direction:column;gap:10px;max-height:320px;overflow:auto;padding-right:6px}
-    .cart-item{display:flex;gap:10px;align-items:center}
-    .qty{display:flex;gap:6px;align-items:center}
-    .checkout{display:flex;justify-content:space-between;align-items:center}
-    .checkout button{background:var(--accent);color:#fff;padding:10px 12px;border-radius:10px;border:none;cursor:pointer}
+    .container { width: min(1120px, 92vw); margin: 0 auto; }
 
-    footer{padding:20px 28px;color:var(--muted)}
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(9, 12, 24, 0.94), rgba(9, 12, 24, 0.65));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
 
-    /* Responsive */
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr;}
-      aside{position:static}
-      .hero{flex-direction:column;align-items:flex-start}
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 20px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: 0.2px; }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(140deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 0 3px var(--ring);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .links { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 0.95rem; }
+
+    .links a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .links a:hover { color: var(--text); }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 11px 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #6141ff);
+      box-shadow: 0 10px 24px rgba(97, 65, 255, 0.35);
+    }
+
+    main { padding: 52px 0 64px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: rgba(20, 28, 50, 0.6);
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: #bfd0f4;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4.2vw, 3.7rem);
+      line-height: 1.07;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin-top: 16px;
+      color: var(--muted);
+      max-width: 58ch;
+      line-height: 1.65;
+      font-size: 1.02rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn.secondary {
+      background: rgba(17, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      color: #dce7ff;
+      box-shadow: none;
+    }
+
+    .stats {
+      margin-top: 24px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      color: #b8caec;
+      font-size: 0.92rem;
+    }
+
+    .editor-panel {
+      background: linear-gradient(160deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .panel-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #cbdaf8;
+      margin-bottom: 14px;
+      font-size: 0.92rem;
+    }
+
+    .signal {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.15);
+    }
+
+    .dropzone {
+      border: 1.5px dashed rgba(125, 95, 255, 0.52);
+      border-radius: 16px;
+      background: rgba(125, 95, 255, 0.08);
+      text-align: center;
+      padding: 28px 18px;
+      color: #c8d7f8;
+    }
+
+    .dropzone input { display: none; }
+
+    .dropzone label {
+      display: inline-block;
+      margin-top: 12px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #6141ff);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .fields {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(9, 12, 24, 0.55);
+    }
+
+    .field small { color: var(--muted); display: block; margin-bottom: 4px; }
+    .field strong { font-weight: 700; font-size: 1.03rem; }
+
+    .field.warning { border-color: rgba(251, 113, 133, 0.45); }
+
+    .section {
+      margin-top: 70px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .section h2 { margin: 0; font-size: clamp(1.4rem, 3vw, 2rem); }
+    .section p { margin: 0; color: var(--muted); }
+
+    .feature-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .feature {
+      border: 1px solid var(--border);
+      background: rgba(17, 23, 42, 0.62);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .feature h3 { margin: 0 0 8px; font-size: 1.05rem; }
+    .feature p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 0.95rem; }
+
+    footer {
+      margin-top: 44px;
+      padding: 20px 0 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      color: #8ba1cb;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .links { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .fields { grid-template-columns: 1fr; }
+      .actions .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand">
-      <div class="logo">FF</div>
-      <div>
-        <h1>FreshFruits</h1>
-        <div style="font-size:12px;color:var(--muted)">Farm-fresh fruits delivered fast</div>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">SE</div>
+        <span>Save Editor Online</span>
       </div>
+      <nav class="links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="btn">Launch Editor</button>
     </div>
-    <nav>
-      <div class="search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 21l-4.35-4.35" stroke="#6b7280" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#6b7280" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <input id="search" placeholder="Search fruits, e.g. mango" />
-      </div>
-      <button class="btn" id="filterBtn">All</button>
-      <button class="btn" id="cartToggle">Cart (0)</button>
-    </nav>
   </header>
 
-  <section class="hero">
-    <div class="hero-left">
-      <h2>Fresh fruits, picked and delivered within hours.</h2>
-      <p>Handpicked seasonal fruits from trusted farms. Small-batch boxes — no preservatives. Free delivery on orders above ₹499.</p>
-      <div class="cta">
-        <button class="primary" onclick="document.getElementById('search').focus()">Shop fresh fruits</button>
-      </div>
-    </div>
-    <div class="hero-right">
-      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="fruits" style="width:320px;border-radius:16px;box-shadow:var(--shadow)">
-    </div>
-  </section>
-
-  <main class="grid">
-    <div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-right:6px">
-        <h3 style="margin:0">Popular fruits</h3>
-        <div style="color:var(--muted);font-size:14px">Showing <span id="count">0</span> items</div>
-      </div>
-
-      <div class="products" id="products"></div>
-    </div>
-
-    <aside>
-      <div class="cart" id="cartPane">
-        <h3>Cart</h3>
-        <div class="cart-items" id="cartItems">
-          <div style="color:var(--muted);font-size:14px">Your cart is empty — add tasty fruits!</div>
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="badge">⚡ No install required · Works in your browser</div>
+        <h1>Edit your game saves in seconds.</h1>
+        <p class="lead">
+          This layout replicates the Save Editor Online style: dark neon aesthetics, clear upload call-to-action,
+          and a simple editor preview for stats like money, inventory, and player values.
+        </p>
+        <div class="actions">
+          <button class="btn">Upload Save File</button>
+          <button class="btn secondary">See Supported Games</button>
         </div>
-        <div class="checkout">
-          <div style="font-weight:700">Total: ₹<span id="total">0</span></div>
-          <button id="checkoutBtn">Checkout</button>
+        <div class="stats">
+          <span>✅ 200k+ files edited</span>
+          <span>✅ Local processing workflow</span>
+          <span>✅ Fast export back to your device</span>
         </div>
       </div>
-    </aside>
+
+      <div class="editor-panel" aria-label="save editor preview">
+        <div class="panel-top">
+          <span>Editor Session</span>
+          <span style="display:flex;align-items:center;gap:8px"><i class="signal"></i>Secure</span>
+        </div>
+
+        <div class="dropzone">
+          <div style="font-size:1.04rem;font-weight:700">Drop your save file here</div>
+          <p style="margin:8px 0 0;color:#b3c8ef">Supported formats: .sav, .dat, .json</p>
+          <label for="file">Choose file</label>
+          <input id="file" type="file" />
+        </div>
+
+        <div class="fields">
+          <div class="field">
+            <small>Money</small>
+            <strong>$999,999</strong>
+          </div>
+          <div class="field">
+            <small>Level</small>
+            <strong>58</strong>
+          </div>
+          <div class="field">
+            <small>Unlocked items</small>
+            <strong>96 / 100</strong>
+          </div>
+          <div class="field warning">
+            <small>Warnings</small>
+            <strong>1 invalid value</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <h2>Built for quick and safe editing</h2>
+      <p>Everything needed for a clean save-edit workflow, inspired by the original website's structure.</p>
+      <div class="feature-grid">
+        <article class="feature">
+          <h3>Instant save parsing</h3>
+          <p>Upload and inspect key save values immediately through a focused panel without extra setup.</p>
+        </article>
+        <article class="feature">
+          <h3>Guided validation</h3>
+          <p>Input checks help avoid corrupt save exports by showing warnings for suspicious values.</p>
+        </article>
+        <article class="feature" id="how">
+          <h3>One-click export</h3>
+          <p>Apply your edits and download an updated save file ready to load in-game.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer id="faq">
+      Replica-style demo page for Save Editor Online. This is a static implementation for UI recreation only.
+    </footer>
   </main>
-
-  <footer>
-    © FreshFruits • Made with ❤️ • Free delivery on orders above ₹499
-  </footer>
-
-  <script>
-    const productsEl = document.getElementById('products');
-    const countEl = document.getElementById('count');
-    const cartToggle = document.getElementById('cartToggle');
-
-    // Sample product database
-    const products = [
-      {id:1,name:'Alphonso Mango (1 kg)',price:299,tag:'Seasonal',img:'https://images.unsplash.com/photo-1593529467221-6d3b9f4f1a33?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:2,name:'Red Apples (1 kg)',price:180,tag:'Regular',img:'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:3,name:'Banana (dozen)',price:69,tag:'Budget',img:'https://images.unsplash.com/photo-1574226516831-e1dff420e37d?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:4,name:'Fresh Grapes (500 g)',price:139,tag:'Regular',img:'https://images.unsplash.com/photo-1571047399553-efec7b5a9b33?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:5,name:'Kesar Mango (1 kg)',price:349,tag:'Premium',img:'https://images.unsplash.com/photo-1628157588553-6d61c19ff3f1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:6,name:'Oranges (1 kg)',price:169,tag:'Seasonal',img:'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:7,name:'Pineapple (each)',price:129,tag:'Regular',img:'https://images.unsplash.com/photo-1518441902113-2b4b0cd4a9b3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'},
-      {id:8,name:'Strawberries (250 g)',price:219,tag:'Premium',img:'https://images.unsplash.com/photo-1561043433-aaf687c4cf4e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder'}
-    ];
-
-    // Cart stored in memory
-    const cart = {};
-
-    function renderProducts(list){
-      productsEl.innerHTML='';
-      list.forEach(p=>{
-        const div = document.createElement('div'); div.className='card';
-        div.innerHTML = `
-          <div class="imgwrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
-          <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
-            <div>
-              <div style="font-weight:700">${p.name}</div>
-              <div style="font-size:13px;color:var(--muted);margin-top:6px">${p.tag}</div>
-            </div>
-            <div class="price-row">
-              <div style="text-align:right">
-                <div class="price">₹${p.price}</div>
-                <div style="font-size:12px;color:var(--muted)">per unit</div>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-            <button class="add" data-id="${p.id}">Add to cart</button>
-            <div class="tag">${p.tag}</div>
-          </div>
-        `;
-        productsEl.appendChild(div);
-      });
-      countEl.textContent = list.length;
-      // attach handlers
-      document.querySelectorAll('.add').forEach(btn=>btn.addEventListener('click',e=>{
-        const id = +e.currentTarget.dataset.id; addToCart(id,1);
-      }));
-    }
-
-    function addToCart(id,qty){
-      const product = products.find(p=>p.id===id);
-      if(!product) return;
-      if(cart[id]) cart[id].qty += qty; else cart[id] = {...product, qty};
-      renderCart();
-    }
-
-    function renderCart(){
-      const cartItems = document.getElementById('cartItems');
-      const totalEl = document.getElementById('total');
-      const cartToggleBtn = document.getElementById('cartToggle');
-      cartItems.innerHTML='';
-      const keys = Object.keys(cart);
-      if(keys.length===0){ cartItems.innerHTML='<div style="color:var(--muted);font-size:14px">Your cart is empty — add tasty fruits!</div>'; cartToggleBtn.textContent='Cart (0)'; totalEl.textContent='0'; return; }
-      let total = 0; let count = 0;
-      keys.forEach(k=>{
-        const it = cart[k];
-        total += it.price * it.qty; count += it.qty;
-        const item = document.createElement('div'); item.className='cart-item';
-        item.innerHTML = `
-          <img src="${it.img}" style="width:56px;height:48px;object-fit:cover;border-radius:8px">
-          <div style="flex:1">
-            <div style="font-weight:700">${it.name}</div>
-            <div style="color:var(--muted);font-size:13px">₹${it.price} × ${it.qty} = ₹${it.price * it.qty}</div>
-          </div>
-          <div class="qty">
-            <button class="btn" data-action="dec" data-id="${it.id}">-</button>
-            <div style="min-width:22px;text-align:center">${it.qty}</div>
-            <button class="btn" data-action="inc" data-id="${it.id}">+</button>
-          </div>
-        `;
-        cartItems.appendChild(item);
-      });
-      totalEl.textContent = total;
-      cartToggleBtn.textContent = `Cart (${count})`;
-
-      // qty handlers
-      cartItems.querySelectorAll('button[data-action]').forEach(b=>b.addEventListener('click',e=>{
-        const id = +e.currentTarget.dataset.id; const action = e.currentTarget.dataset.action;
-        if(action==='inc') cart[id].qty++; else { cart[id].qty--; if(cart[id].qty<=0) delete cart[id]; }
-        renderCart();
-      }));
-    }
-
-    // search filter
-    document.getElementById('search').addEventListener('input',e=>{
-      const q = e.target.value.trim().toLowerCase();
-      const filtered = products.filter(p=> p.name.toLowerCase().includes(q) || p.tag.toLowerCase().includes(q));
-      renderProducts(filtered);
-    });
-
-    // simple filter button cycles tags
-    const filterBtn = document.getElementById('filterBtn');
-    const tags = ['All', ...Array.from(new Set(products.map(p=>p.tag)))];
-    let ti=0; filterBtn.addEventListener('click',()=>{
-      ti = (ti+1) % tags.length; const t = tags[ti]; filterBtn.textContent = t;
-      if(t==='All') renderProducts(products); else renderProducts(products.filter(p=>p.tag===t));
-    });
-
-    // cart toggle scroll to cart
-    document.getElementById('cartToggle').addEventListener('click',()=>{
-      document.getElementById('cartPane').scrollIntoView({behavior:'smooth',block:'center'});
-    });
-
-    // checkout
-    document.getElementById('checkoutBtn').addEventListener('click',()=>{
-      const keys = Object.keys(cart); if(keys.length===0){ alert('Cart is empty. Add some fruits!'); return; }
-      let total=0; keys.forEach(k=> total += cart[k].price * cart[k].qty);
-      alert(`Thanks! Your order total is ₹${total}.\n(This is a demo — implement payment/ordering to complete.)`);
-      // reset cart
-      Object.keys(cart).forEach(k=> delete cart[k]); renderCart();
-    });
-
-    // initial render
-    renderProducts(products);
-    renderCart();
-  </script>
 </body>
 </html>
